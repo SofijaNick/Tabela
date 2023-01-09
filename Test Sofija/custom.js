@@ -35,6 +35,7 @@ post.addEventListener('click', function(){
     const upds = document.querySelectorAll('.update');
     function removeRow(){
         tr.remove(event.target.parentElement);
+        sum();
     }
     dlt.onclick = removeRow;
     function update(){
@@ -71,13 +72,11 @@ function sum(){
     let arrName = [];
     let arrLastname = [];
     let arrGender = [];
-    let arrDate = [];
     let allTrs = document.querySelectorAll('tr');
     let sumTr = document.createElement('tr');
     let sumImeTd = document.createElement('td');
     let sumPrezimeTd = document.createElement('td');
     let sumPolTd = document.createElement('td');
-    let sumDatumTd = document.createElement('td');
     sumTr.classList.add('new');
 
     // Ime Summary
@@ -88,7 +87,7 @@ function sum(){
             obj.broj = 0;
            
             for(let k = 0; k < allTrs.length; k++){
-                if(allTrs[k].children[0].textContent === obj.ime){
+                if(allTrs[k].children[0].textContent === obj.ime && allTrs[k].style.display !== 'none'){
                     obj.broj++;
                 }
             }
@@ -109,7 +108,7 @@ function sum(){
                 obj.broj = 0;
                
                 for(let k = 0; k < allTrs.length; k++){
-                    if(allTrs[k].children[1].textContent === obj.prezime){
+                    if(allTrs[k].children[1].textContent === obj.prezime && allTrs[k].style.display !== 'none'){
                         obj.broj++;
                     }
                 }
@@ -130,7 +129,7 @@ function sum(){
                 obj.broj = 0;
                    
                 for(let k = 0; k < allTrs.length; k++){
-                    if(allTrs[k].children[2].textContent === obj.pol){
+                    if(allTrs[k].children[2].textContent === obj.pol && allTrs[k].style.display !== 'none'){
                         obj.broj++;
                     }
                 }
@@ -206,11 +205,11 @@ function search(){
     return(rows);
 }
 
-filter.addEventListener('click', function(e){
+filter.addEventListener('click', function(){
+    sum();
     let rows = search();
     let trs = document.querySelectorAll('tr');
-    let newRows = document.querySelectorAll('.new');
-    for(let i = 1; i < trs.length - newRows.length; i++){
+    for(let i = 1; i < trs.length - 1; i++){
         let rowIme = trs[i].getElementsByTagName("td")[0].textContent;
         let rowPrezime = trs[i].getElementsByTagName("td")[1].textContent;
         let rowPol = trs[i].getElementsByTagName("td")[2].textContent;
@@ -246,8 +245,10 @@ filter.addEventListener('click', function(e){
 })
 
 reset.addEventListener('click', function(){
+    sum();
     const trz = document.querySelectorAll('tr');
     for(i = 1; i < trz.length; i++){
         trz[i].style.display = '';
     }
+    sum();
 })
