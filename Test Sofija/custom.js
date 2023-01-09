@@ -1,5 +1,4 @@
 const table = document.querySelector('#table');
-const table2 = document.querySelector('#table2');
 const ime = document.querySelector('#ime');
 const prezime = document.querySelector('#prezime');
 const pol = document.querySelector('#pol');
@@ -18,33 +17,31 @@ polF.value = '';
 
 post.addEventListener('click', function(){
     let tr = document.createElement('tr');
-    let one = document.createElement('td');
-    one.innerHTML = ime.value;
-    tr.append(one);
-    let two = document.createElement('td');
-    two.innerHTML = prezime.value;
-    tr.append(two);
-    let three = document.createElement('td');
-    three.innerHTML = pol.value;
-    tr.append(three);
-    let four = document.createElement('td');
-    four.innerHTML = godiste.value;
-    tr.append(four);
+    let tdOne = document.createElement('td');
+    tdOne.innerHTML = ime.value;
+    tr.append(tdOne);
+    let tdTwo = document.createElement('td');
+    tdTwo.innerHTML = prezime.value;
+    tr.append(tdTwo);
+    let tdThree = document.createElement('td');
+    tdThree.innerHTML = pol.value;
+    tr.append(tdThree);
+    let tdFour = document.createElement('td');
+    tdFour.innerHTML = godiste.value;
+    tr.append(tdFour);
     const dlt = document.createElement('button');
     const upd = document.createElement('button');
     const dlts = document.querySelectorAll('.delete');
     const upds = document.querySelectorAll('.update');
-    function remove(){
+    function removeRow(){
         tr.remove(event.target.parentElement);
     }
-    dlt.onclick = remove;
+    dlt.onclick = removeRow;
     function update(){
         let answer1 = prompt('ime');
         let answer2 = prompt('prezime');
         let answer3 = prompt('pol');
-        let answer4 = prompt('godiste')
-        console.log(answer1, answer2, answer3, answer4);
-        console.log(event.target.parentElement.firstChild);
+        let answer4 = prompt('Unesite datum u godina-mesec-dan formatu.')
         let firstTd = event.target.parentElement.firstChild;
         firstTd.innerHTML = answer1;
         firstTd.nextSibling.innerHTML = answer2;
@@ -67,7 +64,105 @@ post.addEventListener('click', function(){
     pol.value = '';
     godiste.value = '';
 
+    sum();
 })
+
+function sum(){
+    let arrName = [];
+    let arrLastname = [];
+    let arrGender = [];
+    let arrDate = [];
+    let allTrs = document.querySelectorAll('tr');
+    let sumTr = document.createElement('tr');
+    let sumImeTd = document.createElement('td');
+    let sumPrezimeTd = document.createElement('td');
+    let sumPolTd = document.createElement('td');
+    let sumDatumTd = document.createElement('td');
+    sumTr.classList.add('new');
+
+    // Ime Summary
+    for(let i = 1; i < allTrs.length; i++){
+        if(allTrs[i].classList.contains('new') === false && allTrs[i].style.display !== 'none'){
+            let obj = {};
+            obj.ime = allTrs[i].children[0].textContent;
+            obj.broj = 0;
+           
+            for(let k = 0; k < allTrs.length; k++){
+                if(allTrs[k].children[0].textContent === obj.ime){
+                    obj.broj++;
+                }
+            }
+            if(arrName.some(o => o.ime === obj.ime)){
+            }else{
+                arrName.push(obj);
+            }
+        }else if(allTrs[i].classList.contains('new') === true && allTrs[i].style.display !== 'none'){
+            allTrs[i].remove();
+        }
+        }
+
+        // Prezime Summary
+        for(let i = 1; i < allTrs.length; i++){
+            if(allTrs[i].classList.contains('new') === false && allTrs[i].style.display !== 'none'){
+                let obj = {};
+                obj.prezime = allTrs[i].children[1].textContent;
+                obj.broj = 0;
+               
+                for(let k = 0; k < allTrs.length; k++){
+                    if(allTrs[k].children[1].textContent === obj.prezime){
+                        obj.broj++;
+                    }
+                }
+                if(arrLastname.some(o => o.prezime === obj.prezime)){
+                }else{
+                    arrLastname.push(obj);
+                }
+            }else if(allTrs[i].classList.contains('new') === true && allTrs[i].style.display !== 'none'){
+                allTrs[i].remove();
+            }
+        }
+
+        // Pol Summary
+        for(let i = 1; i < allTrs.length; i++){
+            if(allTrs[i].classList.contains('new') === false && allTrs[i].style.display !== 'none'){
+                let obj = {};
+                obj.pol = allTrs[i].children[2].textContent;
+                obj.broj = 0;
+                   
+                for(let k = 0; k < allTrs.length; k++){
+                    if(allTrs[k].children[2].textContent === obj.pol){
+                        obj.broj++;
+                    }
+                }
+                if(arrGender.some(o => o.pol === obj.pol)){
+                }else{
+                    arrGender.push(obj);
+                }
+            }else if(allTrs[i].classList.contains('new') === true && allTrs[i].style.display !== 'none'){
+                allTrs[i].remove();
+            }
+        }
+
+    for(j = 0; j < arrName.length; j++){
+        sumImeTd.innerHTML += `${arrName[j].broj}: ${arrName[j].ime} <br>`
+    }
+    for(j = 0; j < arrLastname.length; j++){
+        sumPrezimeTd.innerHTML += `${arrLastname[j].broj}: ${arrLastname[j].prezime} <br>`
+    }
+    for(j = 0; j < arrGender.length; j++){
+        sumPolTd.innerHTML += `${arrGender[j].broj}: ${arrGender[j].pol} <br>`
+    }
+
+    sumTr.append(sumImeTd)
+    sumTr.append(sumPrezimeTd)
+    sumTr.append(sumPolTd)
+    sumTr.append(sumPolTd)
+    table.append(sumTr)
+
+    return (arrName, arrLastname, arrGender);
+    
+}
+
 
 function search(){
     let name = true;
@@ -111,30 +206,11 @@ function search(){
     return(rows);
 }
 
-function brojac(){
-    let arrName = [];
-    let arrLastname = [];
-    let arrGender = [];
-    let allTrs = document.querySelectorAll('tr');
-
-    // for(let i = 1; i < allTrs.length; i++){
-    //     let rowIme = allTrs[i].getElementsByTagName("td")[0].innerHTML;
-    //     let rowPrezime = allTrs[i].getElementsByTagName("td")[1].innerHTML;
-    //     let rowPol = allTrs[i].getElementsByTagName("td")[2].innerHTML;
-    //     arrName.push(rowIme)
-    //     arrLastname.push(rowPrezime)
-    //     arrGender.push(rowPol)
-    // }
-    // console.log(arrName)
-    // console.log(arrLastname)
-    // console.log(arrGender)
-}
-
-
 filter.addEventListener('click', function(e){
     let rows = search();
-    const trs = document.querySelectorAll('tr');
-    for(let i = 1; i < trs.length; i++){
+    let trs = document.querySelectorAll('tr');
+    let newRows = document.querySelectorAll('.new');
+    for(let i = 1; i < trs.length - newRows.length; i++){
         let rowIme = trs[i].getElementsByTagName("td")[0].textContent;
         let rowPrezime = trs[i].getElementsByTagName("td")[1].textContent;
         let rowPol = trs[i].getElementsByTagName("td")[2].textContent;
@@ -166,6 +242,7 @@ filter.addEventListener('click', function(e){
         }
     }
     pol.value = '';
+    sum();
 })
 
 reset.addEventListener('click', function(){
@@ -174,4 +251,3 @@ reset.addEventListener('click', function(){
         trz[i].style.display = '';
     }
 })
-
