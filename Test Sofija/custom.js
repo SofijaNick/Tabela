@@ -245,7 +245,6 @@ filter.addEventListener('click', function(){
 })
 
 reset.addEventListener('click', function(){
-    sum();
     const trz = document.querySelectorAll('tr');
     for(i = 1; i < trz.length; i++){
         trz[i].style.display = '';
